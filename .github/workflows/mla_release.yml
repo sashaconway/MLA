@@ -183,6 +183,7 @@ jobs:
         with:
           tag_name: mla-${{ steps.get_version.outputs.VERSION }}
           release_name: mla-${{ steps.get_version.outputs.VERSION }}
+          draft: true
           body: |
             Verification of assets
             
