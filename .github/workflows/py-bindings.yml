@@ -78,6 +78,65 @@ jobs:
           mypy bindings/python/tests/test_mla.py
           mypy bindings/python/tests/test_examples.py
 
+  musllinux:
+    runs-on: ${{ matrix.platform.runner }}
+    strategy:
+      matrix:
+        platform:
+          - runner: ubuntu-22.04
+            target: x86_64
+          - runner: ubuntu-22.04
+            target: x86
+          - runner: ubuntu-22.04
+            target: aarch64
+          - runner: ubuntu-22.04
+            target: armv7
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: 3.13
+      - name: Build wheels
+        uses: PyO3/maturin-action@ea5bac0f1ccd0ab11c805e2b804bfcb65dac2eab
+        with:
+          target: ${{ matrix.platform.target }}
+          args: --release --out dist --find-interpreter --manifest-path bindings/python/Cargo.toml
+          sccache: true
+          manylinux: musllinux_1_2
+      - name: Upload wheels
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        with:
+          name: wheels-musllinux-${{ matrix.platform.target }}
+          path: dist
+      - name: pytest
+        if: ${{ startsWith(matrix.platform.target, 'x86_64') }}
+        shell: bash
+        run: |
+          set -e
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install mla-archive --find-links dist --force-reinstall
+          pip install pytest
+          cd bindings/python && pytest
+      - name: mypy stubtest and type checking
+        if: ${{ startsWith(matrix.platform.target, 'x86_64') }}
+        shell: bash
+        run: |
+          set -e
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install mypy
+          # it searchs for mla.mla but we can't have a module with the same name as the package
+          # so we use mla.pyi instead of mla/__init__.pyi
+          # and we need to use the --ignore-missing-stub option
+          # to avoid errors about missing stubs for mla.mla
+          stubtest --ignore-missing-stub mla
+          # run type checking
+          mypy bindings/python/examples/read.py
+          mypy bindings/python/examples/write.py
+          mypy bindings/python/tests/test_mla.py
+          mypy bindings/python/tests/test_examples.py
+
   windows:
     runs-on: ${{ matrix.platform.runner }}
     strategy:
