@@ -53,7 +53,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-    - uses: actions-rs/toolchain@b2417cde72dcf67f306c0ae8e0828a81bf0b189f # v1.0.6
+    - uses: dtolnay/rust-toolchain@f7ccc83f9ed1e5b9c81d8a67d7ad1a747e22a561
       if: matrix.container == null
       with:
         # Pin Rust toolchain for releases to a known-good previous stable release
@@ -89,15 +89,12 @@ jobs:
       if: matrix.container != null
       run: cargo build --release --all-features --package mlar --verbose ${{ matrix.cargo_build }}
     - name: Build (outside container)
-      uses: actions-rs/cargo@ae10961054e4aa8b4aa7dffede299aaf087aa33b # v1.0.1
       if: matrix.container == null
       env:
         # RUSTC_BOOTSTRAP=1 allows use of -Z build-std on stable toolchain
         # Required because win7 targets aren't officially supported in stable
         RUSTC_BOOTSTRAP: "${{ contains(matrix.target, 'win7') && '1' || '' }}"
-      with:
-        command: build
-        args: --release --all-features --package mlar --verbose ${{ matrix.cargo_build }}
+      run: cargo build --release --all-features --package mlar --verbose ${{ matrix.cargo_build }}
     - name: Upload resulting 'mlar'
       uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
       with:
