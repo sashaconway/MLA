@@ -1,0 +1,48 @@
+name: test mla release
+# This workflow builds and releases MLA library artifacts across all platforms,
+# including support for legacy Windows 7 targets via custom tier-3 builds.
+
+permissions: {}
+
+on:
+  push:
+
+env:
+  GITHUB_REF: "${{ github.ref }}"
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    # From https://github.com/cloudflare/wrangler/blob/master/.github/workflows/release.yml
+    name: Test GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Query version number
+        id: get_version
+        shell: bash
+        run: |
+          echo "using version tag ${GITHUB_REF:15}"
+          echo "version=${GITHUB_REF:15}" >> $GITHUB_OUTPUT
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: mla-${{ steps.get_version.outputs.VERSION }}
+          release_name: mla-${{ steps.get_version.outputs.VERSION }}
+          draft: true
+          body: |
+            Verification of assets
+            
+            This release assets are built by Github Runners and are attested so ( https://docs.github.com/en/actions/concepts/security/artifact-attestations ).
+            
+            To verify the provenance and transparency of assets you download, you can run `gh attestation verify --repo ANSSI-FR/MLA <file-path>` where `<file-path>` is the file path to the downloaded asset.
+            
+            To do this without a github account, you can first download the trusted root with `gh attestation trusted-root > ./trusted-root.jsonl`, download the attestation at https://github.com/ANSSI-FR/MLA/attestations to `./attestation.json` and run `gh attestation verify --repo ANSSI-FR/MLA --bundle ./attestation.json --custom-trusted-root ./trusted-root.jsonl <file-path>`.
+            
+            Changelog
