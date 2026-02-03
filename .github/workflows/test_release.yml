@@ -36,7 +36,7 @@ jobs:
           release_name: mla-${{ steps.get_version.outputs.VERSION }}
           draft: true
           body: |
-            Verification of assets ${{ steps.get_version.outputs.VERSION }}
+            Verification of assets
             
             This release assets are built by Github Runners and are attested so ( https://docs.github.com/en/actions/concepts/security/artifact-attestations ).
             
@@ -45,3 +45,5 @@ jobs:
             To do this without a github account, you can first download the trusted root with `gh attestation trusted-root > ./trusted-root.jsonl`, download the attestation at https://github.com/ANSSI-FR/MLA/attestations to `./attestation.json` and run `gh attestation verify --repo ANSSI-FR/MLA --bundle ./attestation.json --custom-trusted-root ./trusted-root.jsonl <file-path>`.
             
             Changelog
+            
+            https://github.com/ANSSI-FR/MLA/blob/mla-${{ steps.get_version.outputs.VERSION }}/mla/CHANGELOG.md
