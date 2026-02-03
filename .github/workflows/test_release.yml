@@ -47,3 +47,5 @@ jobs:
             Changelog
             
             https://github.com/ANSSI-FR/MLA/blob/mla-${{ steps.get_version.outputs.VERSION }}/mla/CHANGELOG.md
+      - name: Download linux-x86_64 artifact
+        run: echo ${{ steps.get_version.outputs.VERSION }}
