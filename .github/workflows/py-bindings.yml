@@ -58,7 +58,7 @@ jobs:
           set -e
           python3 -m venv .venv
           source .venv/bin/activate
-          pip install mla-archive --find-links dist --force-reinstall
+          pip install tmlat --find-links dist --force-reinstall
           pip install pytest
           cd bindings/python && pytest
       - name: mypy stubtest and type checking
@@ -117,7 +117,7 @@ jobs:
           set -e
           python3 -m venv .venv
           source .venv/bin/activate
-          pip install mla-archive --find-links dist --force-reinstall
+          pip install tmlat --find-links dist --force-reinstall
           pip install pytest
           cd bindings/python && pytest
       - name: mypy stubtest and type checking
@@ -170,7 +170,7 @@ jobs:
           set -e
           python3 -m venv .venv
           source .venv/Scripts/activate
-          pip install mla-archive --find-links dist --force-reinstall
+          pip install tmlat --find-links dist --force-reinstall
           pip install pytest
           cd bindings/python && pytest
       - name: mypy stubtest and type checking
@@ -221,7 +221,7 @@ jobs:
           set -e
           python3 -m venv .venv
           source .venv/bin/activate
-          pip install mla-archive --find-links dist --force-reinstall
+          pip install tmlat --find-links dist --force-reinstall
           pip install pytest
           cd bindings/python && pytest
       - name: mypy stubtest and type checking
