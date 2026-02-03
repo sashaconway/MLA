@@ -36,7 +36,7 @@ jobs:
           release_name: mla-${{ steps.get_version.outputs.VERSION }}
           draft: true
           body: |
-            Verification of assets
+            Verification of assets ${{ steps.get_version.outputs.VERSION }}
             
             This release assets are built by Github Runners and are attested so ( https://docs.github.com/en/actions/concepts/security/artifact-attestations ).
             
