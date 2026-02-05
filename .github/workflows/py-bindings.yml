@@ -250,10 +250,10 @@ jobs:
           rm -rf dist
           mkdir dist
           mv wheels-*/* dist
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
-        with:
-          subject-path: dist/
+#      - name: Generate artifact attestation
+#        uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
+#        with:
+#          subject-path: dist/
       - name: publish
         uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
         with:
