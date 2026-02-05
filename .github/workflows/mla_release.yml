@@ -161,6 +161,7 @@ jobs:
     name: GitHub Release
     needs: build
     runs-on: ubuntu-latest
+    container: rust@sha256:f58923369ba295ae1f60bc49d03f2c955a5c93a0b7d49acfb2b2a65bebaf350d # v1.92.0 ("old-stable" cf. below)
     steps:
       - name: Query version number
         id: get_version
@@ -334,7 +335,6 @@ jobs:
           asset_name: mla.hpp
 
       - name: Publish to crates.io
-        container: rust@sha256:f58923369ba295ae1f60bc49d03f2c955a5c93a0b7d49acfb2b2a65bebaf350d # v1.92.0 ("old-stable" cf. below)
         run: cargo publish --package mla
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
