@@ -125,7 +125,6 @@ jobs:
         with:
           tag_name: mlar-${{ steps.get_version.outputs.VERSION }}
           release_name: mlar-${{ steps.get_version.outputs.VERSION }}
-          body: ${{ steps.changelog_reader.outputs.changes }}
           draft: true
           body: |
             Verification of assets
